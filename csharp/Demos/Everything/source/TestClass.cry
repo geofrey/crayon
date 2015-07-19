@@ -5,15 +5,16 @@ class TestClass : Scene {
 		this.counter = 0;
 		
 		this.state = [];
+		this.previous_continuation = false;
 		this.tests = this.get_tests();
 		
 		this.red = [255, 0, 0];
 		this.green = [0, 180, 0];
 		this.gray = [50, 50, 50];
 		
-		this.nuke_folder_contents('.');
-		files = $user_data_directory_listing('.');
-		$assert(files.length == 0, "nuke setup did not clear everything");
+		//this.nuke_folder_contents('.');
+		//files = $user_data_directory_listing('.');
+		//$assert(files.length == 0, "nuke setup did not clear everything");
 	}
 	
 	function get_tests() {
@@ -39,11 +40,15 @@ class TestClass : Scene {
 			test = this.tests[this.counter];
 			
 			error = test();
-			
-			if (error == null) this.state.add(true);
-			else {
-				this.state.add(false);
-				$print(error);
+			if (error == true) {
+				// continuation flag
+				this.counter--;
+			} else {
+				if (error == null) this.state.add(true);
+				else {
+					this.state.add(false);
+					$print(error);
+				}
 			}
 		}
 		
@@ -69,6 +74,20 @@ class TestClass : Scene {
 				index++;
 			}
 		}
+	}
+	
+	function assert(expected, actual, message = null) {
+		if (expected == null && actual == null) return false;
+		
+		if (expected == null || actual == null ||
+			(expected != actual && expected + '' != actual + '')) {
+			$print("Assertion failed!");
+			if (message != null) $print(message);
+			$print("Expected: " + expected);
+			$print("Actual: " + actual);
+			return true;
+		}
+		return false;
 	}
 }
 

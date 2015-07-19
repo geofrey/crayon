@@ -1,4 +1,3 @@
-
 $print("The Everything Test.");
 
 import 'Scene.cry';
@@ -7,7 +6,7 @@ import 'TestClass.cry';
 import 'DrawingTest.cry';
 import 'GeneralDiskTest.cry';
 import 'ImageSheetTest.cry';
-import 'InternetTest.cry';
+import 'HttpTest.cry';
 import 'MusicTest.cry';
 import 'SoundTest.cry';
 import 'UserDataTest.cry';
@@ -100,6 +99,7 @@ class MainMenu : Scene {
 	
 	function invoke(id) {
 		switch (id) {
+			case 'http': this.next = new HttpTest(); break;
 			case 'user_data': this.next = new UserDataTest(); break;
 			case 'exit': this.end_game = true;
 		}
@@ -107,7 +107,10 @@ class MainMenu : Scene {
 	
 	function render() {
 		this.click_regions.clear();
-		this.render_button('user_data', 'images/user_data_test.png', 10, 10, 226, 38);
+		y = 10;
+		this.render_button('http', 'images/http_test.png', 10, y, 226, 38);
+		y += 50;
+		this.render_button('user_data', 'images/user_data_test.png', 10, y, 226, 38);
 		
 		if (this.current_xy != null) {
 			cx = this.current_xy[0];
